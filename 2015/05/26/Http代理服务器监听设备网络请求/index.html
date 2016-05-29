@@ -1,0 +1,452 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Http代理服务器监听设备网络请求 | Javascript + HTML5 +	CSS3.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="King">
+    
+    <meta name="description" content="##工具
+
+Fiddler —网络请求监听工具
+CCProxy — 代理服务器工具
+360WiFi —创建热点的硬件设备
+
+
+这篇内容是为了弥补《Weinre实现远程调试页面》中调试页面 weinre 在网络调试上的先天不足。
+
+##使用方法：
+###1. Fiddler 开启远程连接Fiddler">
+    
+    
+    
+    
+    <link rel="alternate" href="http://shimengwen.github.io/sitemap.xml" title="Javascript + HTML5 +	CSS3.0" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Javascript + HTML5 +	CSS3.0" title="Javascript + HTML5 +	CSS3.0"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Javascript + HTML5 +	CSS3.0">Javascript + HTML5 +	CSS3.0</a></h1>
+				<h2 class="blog-motto">一个关于前端的博客</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/res">资源</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:shimengwen.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/26/Http代理服务器监听设备网络请求/" title="Http代理服务器监听设备网络请求" itemprop="url">Http代理服务器监听设备网络请求</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://shimengwen.github.io" title="King">King</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-05-26T03:31:11.000Z" itemprop="datePublished">2015-05-26</time>
+    更新日期:<time datetime="2016-05-29T09:20:40.000Z" itemprop="dateModified">2016-05-29</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+		</div>
+		
+		<p>##工具</p>
+<ul>
+<li>Fiddler —网络请求监听工具</li>
+<li>CCProxy — 代理服务器工具</li>
+<li>360WiFi —创建热点的硬件设备</li>
+</ul>
+<blockquote>
+<p>这篇内容是为了弥补《<a href="https://www.zybuluo.com/king-/note/106174" target="_blank" rel="external">Weinre实现远程调试页面</a>》中调试页面 <code>weinre</code> 在网络调试上的先天不足。</p>
+</blockquote>
+<p>##使用方法：</p>
+<p>###1. Fiddler 开启远程连接<br>Fiddler设置： Tools -&gt; Fiddler Options -&gt; Connections -&gt;  Allow remote computers to connect</p>
+<p><img src="http://qn-blog-img.qiniudn.com/blog_fiddler-1.png" alt=""></p>
+<p>###2. PC开启代理服务器</p>
+<p>####方法一：</p>
+<p>Win7上直接通过控制面板设置，具体可以看 <a href="http://jingyan.baidu.com/article/0aa22375866c8988cc0d648c.html" title="百度经验" target="_blank" rel="external">windows 7 系统如何设置代理服务器</a></p>
+<p><img src="http://qn-blog-img.qiniudn.com/blog_proxy-1.png" alt=""></p>
+<p><em>但是这种方法我电脑上就尝试成功过一次，后面也不知道为什么不成功，所以推荐第二种方法。</em></p>
+<p>####方法二：<br>下载 <code>CCProxy</code> 直接打开工具，并且启动代理(<em>其实这里软件打开后他就默认启动了代理了</em>)<br><img src="http://qn-blog-img.qiniudn.com/blog_proxy-2.png" alt=""></p>
+<p>###3. 移动设备连接360WiFi热点<br>这个不用解释…</p>
+<p>###4. 对接入的WiFi热点设置HTTP代理，接入代理服务器上</p>
+<ul>
+<li>iOS: 设置 -&gt; 无线局域网 -&gt; 选择接入的热点 -&gt; HTTP代理 -&gt; 手动<br>后面就填写相关服务器、端口号之类的信息了</li>
+</ul>
+<p><img src="http://qn-blog-img.qiniudn.com/blog_proxy-3.PNG" alt=""></p>
+<ul>
+<li>Android：系统设置 -&gt; WLAN -&gt; 选择接入热点属性 -&gt; 代理设置 -&gt; 手动</li>
+</ul>
+<p>我只通过iOS进行了验证，所以不上Android的图了。</p>
+<p>现在我们可以在 <code>Fiddler</code> 中去查看移动设备中发生的请求了。<br>这是我们监听到的 <code>微信</code> 移动设备APP发生的请求。</p>
+<p><img src="http://qn-blog-img.qiniudn.com/blog_proxy-4.PNG" alt=""></p>
+<p>补充说明：<em>这篇文章是根据学习《跨终端Web》第41页内容，自己理解后的实现过程，结果是成功的，但是详细的相关工具操作并未做深入研究，工具的相关使用原理并不是很清楚</em></p>
+<p><strong>注意</strong>：</p>
+<p>如果这样的调试工作中出现自己的电脑不能正常访问网页的时候，可能是代理访问设置有问题，导致本机网络也代理了，所以不能访问。</p>
+<p>自己的移动设备也同样如此，代理服务器关闭后，如果没有取消代理也将无法访问网络。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/移动开发/">移动开发</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/web前端开发-移动开发/">web前端开发 移动开发</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://shimengwen.github.io/2015/05/26/Http代理服务器监听设备网络请求/" data-title="Http代理服务器监听设备网络请求 | Javascript + HTML5 +	CSS3.0" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/05/29/hello-world/" title="Hello World">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Hello World</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/05/24/Weinre实现远程调试页面/"  title="Weinre实现远程调试页面">
+ <strong>NEXT:</strong><br/> 
+ <span>Weinre实现远程调试页面
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<!-- 多说评论框 start -->
+  <div class="ds-thread" data-thread-key="-Http代理服务器监听设备网络请求" data-title="Http代理服务器监听设备网络请求" data-url="Http代理服务器监听设备网络请求"></div>
+  <!-- 多说评论框 end -->
+  <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+  <script type="text/javascript">
+  var duoshuoQuery = {short_name:'undefined'};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+       || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+  <!-- 多说公共JS代码 end -->
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/web前端开发/" title="web前端开发">web前端开发<sup>6</sup></a></li>
+		
+			<li><a href="/categories/web前端开发-移动开发/" title="web前端开发 移动开发">web前端开发 移动开发<sup>1</sup></a></li>
+		
+			<li><a href="/categories/前端开发/" title="前端开发">前端开发<sup>2</sup></a></li>
+		
+			<li><a href="/categories/开发工具/" title="开发工具">开发工具<sup>1</sup></a></li>
+		
+			<li><a href="/categories/操作系统/" title="操作系统">操作系统<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/CSS/" title="CSS">CSS<sup>3</sup></a></li>
+		
+			<li><a href="/tags/Extjs/" title="Extjs">Extjs<sup>1</sup></a></li>
+		
+			<li><a href="/tags/HTML/" title="HTML">HTML<sup>3</sup></a></li>
+		
+			<li><a href="/tags/HTML-CSS/" title="HTML CSS">HTML CSS<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hello-World/" title="Hello World">Hello World<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IDE工具/" title="IDE工具">IDE工具<sup>1</sup></a></li>
+		
+			<li><a href="/tags/License/" title="License">License<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Sass/" title="Sass">Sass<sup>1</sup></a></li>
+		
+			<li><a href="/tags/浏览器/" title="浏览器">浏览器<sup>1</sup></a></li>
+		
+			<li><a href="/tags/移动开发/" title="移动开发">移动开发<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="http://shimengwen.github.io/sitemap.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/dada246" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/shimengwen" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://shimengwen.github.io" target="_blank" title="King">King</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"shimengwen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+<script type="text/javascript">
+    var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cscript id='baiduTJ' src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fd9ccaa1ac5534d0b3f65d71f34f9e107' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  </body>
+</html>

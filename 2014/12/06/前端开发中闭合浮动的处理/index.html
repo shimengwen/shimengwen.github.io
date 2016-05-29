@@ -1,0 +1,511 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>前端开发中闭合浮动的处理 | Javascript + HTML5 +	CSS3.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="King">
+    
+    <meta name="description" content="#闭合浮动的处理方法：
+
+在支持BFC的浏览器中（IE8+/firefox/cheome/safari）通过创建新的BFC闭合浮动。
+在不支持BFC的浏览器中(IE6-7)通过出发hasLayout闭合浮动。
+
+#首先解释一下什么是BFC，什么是hasLayout
+##BFC : (block fo">
+    
+    
+    
+    
+    <link rel="alternate" href="http://shimengwen.github.io/sitemap.xml" title="Javascript + HTML5 +	CSS3.0" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Javascript + HTML5 +	CSS3.0" title="Javascript + HTML5 +	CSS3.0"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Javascript + HTML5 +	CSS3.0">Javascript + HTML5 +	CSS3.0</a></h1>
+				<h2 class="blog-motto">一个关于前端的博客</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/res">资源</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:shimengwen.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/12/06/前端开发中闭合浮动的处理/" title="前端开发中闭合浮动的处理" itemprop="url">前端开发中闭合浮动的处理</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://shimengwen.github.io" title="King">King</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-12-06T15:13:53.000Z" itemprop="datePublished">2014-12-06</time>
+    更新日期:<time datetime="2016-05-29T09:20:40.000Z" itemprop="dateModified">2016-05-29</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+		</div>
+		
+		<p>#闭合浮动的处理方法：</p>
+<blockquote>
+<p>在支持BFC的浏览器中（IE8+/firefox/cheome/safari）通过创建新的BFC闭合浮动。</p>
+<p>在不支持BFC的浏览器中(IE6-7)通过出发hasLayout闭合浮动。</p>
+</blockquote>
+<p>#首先解释一下什么是BFC，什么是hasLayout</p>
+<p>##<strong>BFC :</strong> (<a href="http://www.w3.org/TR/CSS21/visuren.html#block-formatting" target="_blank" rel="external">block formatting contexts</a>)<br>从名字中我们就能知道，BFC指的是块格式化上下文。这是W3C CSS2.1规范中的一个概念。在CSS3.0中被定义为flow root，并对触发条件进行了说明。</p>
+<p>###BFC的特性：</p>
+<ol>
+<li><p>块级格式化上下文会阻止外边距叠加<br>当两个相邻的块框在同一个块级格式化上下文中时，它们之间垂直方向的外边距会发生叠加。换句话说，如果这两个相邻的块框不属于同一个块级格式化上下文，那么它们的外边距就不会叠加。</p>
+</li>
+<li><p>块级格式化上下文不会重叠浮动元素<br>根据规定，一个块级格式化上下文的边框不能和它里面的元素的外边距重叠。这就意味着浏览器将会给块级格式化上下文创建隐式的外边距来阻止它和浮动元素的外边距叠加。由于这个原因，当给一个挨着浮动的块级格式化上下文添加负的外边距时将会不起作用（Webkit和IE6在这点上有一个问题——可以看这个测试用例）。 </p>
+</li>
+<li><p>块级格式化上下文通常可以包含浮动</p>
+</li>
+</ol>
+<blockquote>
+<p><strong>通俗地来说：</strong>创建了 BFC的元素就是一个独立的盒子，里面的子元素不会在布局上影响外面的元素，反之亦然，同时BFC任然属于文档中的普通流。</p>
+</blockquote>
+<p>###如何触发 BFC</p>
+<ul>
+<li><p>float 除了none以外的值 </p>
+</li>
+<li><p>overflow 除了visible 以外的值（hidden，auto，scroll ） </p>
+</li>
+<li><p>display (table-cell，table-caption，inline-block) </p>
+</li>
+<li><p>position（absolute，fixed） </p>
+</li>
+<li><p>fieldset元素</p>
+</li>
+</ul>
+<blockquote>
+<p>需要注意的是，display:table 本身并不会创建BFC，但是它会产生匿名框(anonymous boxes)，而匿名框中的display:table-cell可以创建新的BFC，换句话说，触发块级格式化上下文的是匿名框，而不是display:table。所以通过display:table和display:table-cell创建的BFC效果是不一样的。</p>
+<p>fieldset 元素在www.w3.org里目前没有任何有关这个触发行为的信息，直到HTML5标准里才出现。有些浏览器bugs（Webkit，Mozilla）提到过这个触发行为，但是没有任何官方声明。实际上，即使fieldset在大多数的浏览器上都能创建新的块级格式化上下文，开发者也不应该把这当做是理所当然的。CSS 2.1没有定义哪种属性适用于表单控件，也没有定义如何使用CSS来给它们添加样式。用户代理可能会给这些属性应用CSS属性，建议开发者们把这种支持当做实验性质的，更高版本的CSS可能会进一步规范这个。</p>
+</blockquote>
+<p>##<strong>hasLayout :</strong><br>haslayout 是Windows Internet Explorer渲染引擎的一个内部组成部分。在Internet Explorer中，一个元素要么自己对自身的内容进行计算大小和组织，要么依赖于父元素来计算尺寸和组织内容。为了调节这两个不同的概念，渲染引擎采用了 hasLayout 的属性，属性值可以为true或false。当一个元素的 hasLayout 属性值为true时，我们说这个元素有一个布局（layout）</p>
+<p>###hasLayout描述<br>当一个元素有一个布局时，它负责对自己和可能的子孙元素进行尺寸计算和定位。简单来说，这意味着这个元素需要花更多的代价来维护自身和里面的内容，而不是依赖于祖先元素来完成这些工作。因此，一些元素默认会有一个布局。当我们说一个元素“拥有layout”或“得到layout”，或者说一个元素“has layout” 的时候，我们的意思是指它的微软专有属性 hasLayout 被设为了 true 。一个“layout元素”可以是一个默认就拥有 layout 的元素或者是一个通过设置某些 CSS 属性得到 layout 的元素。如果某个HTML元素拥有 haslayout 属性，那么这个元素的 haslayout 的值一定只有 true，haslayout 为只读属性 一旦被触发，就不可逆转。通过 IE Developer Toolbar 可以查看 IE 下 HTML 元素是否拥有haslayout，在 IE Developer Toolbar 下，拥有 haslayout 的元素，通常显示为“haslayout = -1”。</p>
+<p><strong>负责组织自身内容的元素将默认有一个布局，主要包括以下元素（不完全列表）：</strong></p>
+<ul>
+<li>body and html</li>
+<li>table, tr, th, td</li>
+<li>img</li>
+<li>hr</li>
+<li>input, button, file, select, textarea, fieldset</li>
+<li>marquee</li>
+<li>frameset, frame, iframe</li>
+<li>objects, applets, embed</li>
+</ul>
+<p>对于并非所有的元素都默认有布局，微软给出的主要原因是“性能和简洁”。如果所有的元素都默认有布局，会对性能和内存使用上产生有害的影响。</p>
+<p>###如何触发 haslayout？</p>
+<p>大部分的 IE 显示错误，都可以通过激发元素的 haslayout 属性来修正。可以通过设置 css 尺寸属性(width/height)等来激发元素的 haslayout，使其<code>拥有布局</code>。如下所示，通过设置以下 css 属性即可。</p>
+<ul>
+<li>display: inline-block</li>
+<li>height: (任何值除了auto)</li>
+<li>float: (left 或 right)</li>
+<li>position: absolute</li>
+<li>width: (任何值除了auto)</li>
+<li>writing-mode: tb-rl</li>
+<li>zoom: (除 normal 外任意值)</li>
+</ul>
+<p><strong>Internet Explorer 7 还有一些额外的属性(不完全列表):</strong></p>
+<ul>
+<li>min-height: (任意值)</li>
+<li>max-height: (除 none 外任意值)</li>
+<li>min-width: (任意值)</li>
+<li>max-width: (除 none 外任意值)</li>
+<li>overflow: (除 visible 外任意值)</li>
+<li>overflow-x: (除 visible 外任意值)</li>
+<li>overflow-y: (除 visible 外任意值)</li>
+<li>position: fixed</li>
+</ul>
+<p>其中 overflow-x 和 overflow-y 是 css3 盒模型中的属性，目前还未被浏览器广泛支持。</p>
+<p>对于内联元素(默认即为内联的元素，如 span，或 display:inline; 的元素)，</p>
+<p>width 和 height 只在 IE5.x 下和 IE6 或更新版本的 quirks 模式下触发 hasLayout 。而对于 IE6，如果浏览器运行于标准兼容模式下，内联元素会忽略 width 或 height 属性，所以设置 width 或 height 不能在此种情况下令该元素具有 layout。<br>zoom 总是可以触发 hasLayout，但是在 IE5.0 中不支持。<br>具有“layout” 的元素如果同时 display: inline ，那么它的行为就和标准中所说的 inline-block 很类似了：在段落中和普通文字一样在水平方向和连续排列，受 vertical-align 影响，并且大小可以根据内容自适应调整。这也可以解释为什么单单在 IE/Win 中内联元素可以包含块级元素而少出问题，因为在别的浏览器中 display: inline 就是内联，不像 IE/Win 一旦内联元素拥有 layout 还会变成 inline-block。</p>
+<p>###haslayout 问题的调试与解决</p>
+<p>当网页在 IE 中有异常表现时，可以尝试激发 haslayout 来看看是不是问题所在。常用的方法是给某元素 css 设定 zoom:1 。使用 zoom:1 是因为大多数情况下，它能在不影响现有环境的条件下激发元素的 haslayout。而一旦问题消失，那基本上就可以判断是 haslayout 的原因。然后就可以通过设定相应的 css 属性来对这个问题进行修正了。建议首先要考虑的是设定元素的 width/height 属性，其次再考虑其他属性。</p>
+<p>对 IE6 及更早版本来说，常用的方法被称为霍莉破解(Holly hack)，即设定这个元素的高度为 1% (height:1%;)。需要注意的是，当这个元素的 overflow 属性被设置为 visible 时，这个方法就失效了。或者使用 IE 的条件注释。</p>
+<p>对 IE7 来说，最好的方法时设置元素的最小高度为 0 (min-height:0;)。</p>
+<p>###haslayout 问题引起的常见 bug</p>
+<ul>
+<li><p>IE6 及更低版本的双空白边浮动 bug<br>bug 修复: display:inline;</p>
+</li>
+<li><p>IE5-6/win 的 3 像素偏移 bug<br>bug 修复: _height:1%;</p>
+</li>
+<li><p>E6 的躲躲猫(peek-a-boo) bug<br>bug 修复: _height:1%;</p>
+</li>
+</ul>
+<p>##完美的浮动闭合方法</p>
+<p>从各个方面比较，after伪元素闭合浮动无疑是相对比较好的解决方案了，下面详细说说该方法。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.clearfix:after &#123;content:"."; display:block; height:0; visibility:hidden; clear:both; &#125;</span><br><span class="line">.clearfix &#123; *zoom:1; &#125;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>display:block 使生成的元素以块级元素显示,占满剩余空间;</li>
+<li>height:0 避免生成内容破坏原有布局的高度。</li>
+<li>visibility:hidden 使生成的内容不可见，并允许可能被生成内容盖住的内容可以进行点击和交互;</li>
+<li>通过 content:”.”生成内容作为最后一个元素，至于content里面是点还是其他都是可以的，例如oocss里面就有经典的 content:”XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX”,有些版本可能content 里面内容为空,一丝冰凉是不推荐这样做的,firefox直到7.0 content:”” 仍然会产生额外的空隙；</li>
+<li>zoom：1 触发IE hasLayout。<br>通过分析发现，除了clear：both用来闭合浮动的，其他代码无非都是为了隐藏掉content生成的内容，这也就是其他版本的闭合浮动为什么会有font-size：0，line-height：0。</li>
+</ol>
+<p><strong>精益求精方案一：</strong></p>
+<p>相对于空标签闭合浮动的方法代码似乎还是有些冗余，通过查询发现Unicode字符里有一个“零宽度空格”，也就是U+200B ，这个字符本身是不可见的，所以我们完全可以省略掉 visibility:hidden了<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.clearfix:after &#123;content:"\200B"; display:block; height:0; clear:both; &#125;</span><br><span class="line">.clearfix &#123; *zoom:1; &#125;.</span><br></pre></td></tr></table></figure></p>
+<p><strong>精益求精方案二：</strong></p>
+<p>由Nicolas Gallagher 大湿提出来的,原文:A new micro clearfix hack，该方法也不存在firefox中空隙的问题。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* For modern browsers */</span></span><br><span class="line"><span class="selector-class">.cf</span><span class="selector-pseudo">:before</span>,<span class="selector-class">.cf</span><span class="selector-pseudo">:after</span> &#123;</span><br><span class="line"><span class="attribute">content</span>:<span class="string">""</span>;</span><br><span class="line"><span class="attribute">display</span>:table;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.cf</span><span class="selector-pseudo">:after</span> &#123; <span class="attribute">clear</span>:both; &#125;<span class="comment">/* For IE 6/7 (trigger hasLayout) */</span></span><br><span class="line"><span class="selector-class">.cf</span> &#123; <span class="attribute">zoom</span>:<span class="number">1</span>; &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这是一遍整理的资料，并非自己说写，原文请查看<br><a href="http://iyunlu.com/view/css-xhtml/55.html" target="_blank" rel="external">那些年我们一起清除过的浮动</a><br><a href="http://www.qianduan.net/comprehensive-haslayout.html" target="_blank" rel="external">haslayout综合</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/HTML-CSS/">HTML CSS</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://shimengwen.github.io/2014/12/06/前端开发中闭合浮动的处理/" data-title="前端开发中闭合浮动的处理 | Javascript + HTML5 +	CSS3.0" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/03/24/Sass Compass sprite 的使用(一)/" title="Sass Compass sprite 的使用(一)">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Sass Compass sprite 的使用(一)</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/12/06/line-height和字体实际高度的计算/"  title="line-height和字体实际高度的计算">
+ <strong>NEXT:</strong><br/> 
+ <span>line-height和字体实际高度的计算
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<!-- 多说评论框 start -->
+  <div class="ds-thread" data-thread-key="-前端开发中闭合浮动的处理" data-title="前端开发中闭合浮动的处理" data-url="前端开发中闭合浮动的处理"></div>
+  <!-- 多说评论框 end -->
+  <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+  <script type="text/javascript">
+  var duoshuoQuery = {short_name:'undefined'};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+       || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+  <!-- 多说公共JS代码 end -->
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/web前端开发/" title="web前端开发">web前端开发<sup>6</sup></a></li>
+		
+			<li><a href="/categories/web前端开发-移动开发/" title="web前端开发 移动开发">web前端开发 移动开发<sup>1</sup></a></li>
+		
+			<li><a href="/categories/前端开发/" title="前端开发">前端开发<sup>2</sup></a></li>
+		
+			<li><a href="/categories/开发工具/" title="开发工具">开发工具<sup>1</sup></a></li>
+		
+			<li><a href="/categories/操作系统/" title="操作系统">操作系统<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/CSS/" title="CSS">CSS<sup>3</sup></a></li>
+		
+			<li><a href="/tags/Extjs/" title="Extjs">Extjs<sup>1</sup></a></li>
+		
+			<li><a href="/tags/HTML/" title="HTML">HTML<sup>3</sup></a></li>
+		
+			<li><a href="/tags/HTML-CSS/" title="HTML CSS">HTML CSS<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hello-World/" title="Hello World">Hello World<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IDE工具/" title="IDE工具">IDE工具<sup>1</sup></a></li>
+		
+			<li><a href="/tags/License/" title="License">License<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Sass/" title="Sass">Sass<sup>1</sup></a></li>
+		
+			<li><a href="/tags/浏览器/" title="浏览器">浏览器<sup>1</sup></a></li>
+		
+			<li><a href="/tags/移动开发/" title="移动开发">移动开发<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="http://shimengwen.github.io/sitemap.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/dada246" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/shimengwen" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://shimengwen.github.io" target="_blank" title="King">King</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"shimengwen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+<script type="text/javascript">
+    var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cscript id='baiduTJ' src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fd9ccaa1ac5534d0b3f65d71f34f9e107' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  </body>
+</html>

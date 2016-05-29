@@ -1,0 +1,480 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>inline-block在低版本浏览器和现代浏览器中的表现 | Javascript + HTML5 +	CSS3.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="King">
+    
+    <meta name="description" content="首先从字面上我们就可以看出来inline-block是一个具有inline特性同时也具有block特性的属性值，同时他也被深入了人心，因为当我们需要一个标签有自己的宽高同时又是内链标签的时候我们就会想起他。1234display:inline-block;/*ie8后的现代浏览器支持*//*下面是i">
+    
+    
+    
+    
+    <link rel="alternate" href="http://shimengwen.github.io/sitemap.xml" title="Javascript + HTML5 +	CSS3.0" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Javascript + HTML5 +	CSS3.0" title="Javascript + HTML5 +	CSS3.0"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Javascript + HTML5 +	CSS3.0">Javascript + HTML5 +	CSS3.0</a></h1>
+				<h2 class="blog-motto">一个关于前端的博客</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/res">资源</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:shimengwen.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/12/06/inline-block在低版本浏览器和现代浏览器中的表现/" title="inline-block在低版本浏览器和现代浏览器中的表现" itemprop="url">inline-block在低版本浏览器和现代浏览器中的表现</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://shimengwen.github.io" title="King">King</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-12-06T14:39:01.000Z" itemprop="datePublished">2014-12-06</time>
+    更新日期:<time datetime="2016-05-29T09:20:40.000Z" itemprop="dateModified">2016-05-29</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#到底什么是-inline-block"><span class="toc-number">1.</span> <span class="toc-text">到底什么是 inline-block</span></a></li></ol>
+		</div>
+		
+		<p>首先从字面上我们就可以看出来inline-block是一个具有inline特性同时也具有block特性的属性值，同时他也被深入了人心，因为当我们需要一个标签有自己的宽高同时又是内链标签的时候我们就会想起他。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">display</span><span class="selector-pseudo">:inline-block</span>;<span class="comment">/*ie8后的现代浏览器支持*/</span></span><br><span class="line"><span class="comment">/*下面是ie低版本浏览器兼容写法，设置标签为内链标签，并通过zoom触发ie的hasLayout特性*/</span></span><br><span class="line">*<span class="selector-tag">display</span><span class="selector-pseudo">:inline</span>;</span><br><span class="line">*<span class="selector-tag">zoom</span><span class="selector-pseudo">:1</span>;</span><br></pre></td></tr></table></figure></p>
+<h1 id="到底什么是-inline-block"><a href="#到底什么是-inline-block" class="headerlink" title="到底什么是 inline-block"></a>到底什么是 inline-block</h1><p>在W3C  CSS2.1中的<a href="http://www.w3.org/TR/CSS2/visuren.html#display-prop" target="_blank" rel="external">9.2.4 The ‘display’ property</a>是这样定义inline-block属性值的</p>
+<blockquote>
+<p><strong>inline-block</strong><br>This value causes an element to generate an inline-level block container. The inside of an inline-block is formatted as a block box, and the element itself is formatted as an atomic inline-level box.</p>
+</blockquote>
+<p><strong>其表达的意思是：</strong> inline-block 的元素既具有 block 元素可以设置宽高的特性，同时又具有 inline 元素默认不换行的特性。当然不仅仅是这些特性，比如 inline-block 元素也可以设置 vertical-align 属性。</p>
+<p><strong>简而言之：</strong><br>inline-block 后的元素就是一个格式化为行内元素的块容器( Block container )</p>
+<p>这里我们不讨论ie6-7是否支持 <code>inline-block</code> 属性值的问题，具体的可以查看<a href="http://iyunlu.com/view/css-xhtml/64.html" target="_blank" rel="external">《inline-block 前世今生》</a></p>
+<blockquote>
+<p>该文中已经强调，IE从IE5.5开始就存在<code>inline-block</code>这个属性值了，甚至比CSS2.1中提出<code>inline-block</code>还早，只是两者并不是同一个<code>inline-block</code>。</p>
+</blockquote>
+<p>这里确实有点绕，具体的还请看博文去吧。</p>
+<p>#inline-block中出现元素尾部有水平空隙的问题<br>在上面我们已经提过，inline-block是一个包含有inline特性和block特性的属性值。那么单我们分解来看，我们就能清楚的知道这个<code>水平空隙</code>是何来的。<br><strong>HTML:</strong><br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"d1"</span>&gt;</span>我是一个div标签，我的display属性为block<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"d2"</span>&gt;</span>我也是一个div标签，我的display属性为block<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"s1"</span>&gt;</span>我是一个span标签，我的display属性为inline<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"s1 s2"</span>&gt;</span>我是另一个span标签，我的display属性也为inline<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"s1 s3"</span>&gt;</span>我是另一个span标签，我的display属性也为inline<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>CSS:</strong><br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span>,</span><br><span class="line"><span class="selector-tag">div</span>,</span><br><span class="line"><span class="selector-tag">span</span> &#123;</span><br><span class="line">    <span class="attribute">padding</span>: <span class="number">0</span>;</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.d1</span>,</span><br><span class="line"><span class="selector-class">.d2</span> &#123;</span><br><span class="line">    <span class="attribute">overflow</span>: hidden;</span><br><span class="line">    <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#cba</span>;</span><br><span class="line">    <span class="attribute">font-size</span>: <span class="number">30px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.s1</span> &#123;</span><br><span class="line">    <span class="attribute">background</span>: <span class="number">#f29c9c</span>;</span><br><span class="line">    <span class="attribute">font-size</span>: <span class="number">30px</span>;</span><br><span class="line">    <span class="attribute">font-weight</span>: <span class="number">700</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.d1</span>,</span><br><span class="line"><span class="selector-class">.s2</span> &#123;</span><br><span class="line">    <span class="attribute">background</span>: <span class="number">#a2a4cb</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.d2</span>,</span><br><span class="line"><span class="selector-class">.s3</span> &#123;</span><br><span class="line">    <span class="attribute">background</span>: <span class="number">#a2cba5</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://qn-blog-img.qiniudn.com/blog_div-span.png" alt="inline属性与block属性"><br>从图中我们可以看出，带有block的div元素是完整填充整个块的，但是带有inline的span元素则在元素尾部带有留白的空隙，同时元素的上下也带有较为明显的水平留白。那么从这里我们就可以推断出。inline-block中的尾部水平空隙是inline带来的。</p>
+<p>##问题扩展<br><strong>那怎么inline中的上下水平留白在inline-block中不见了呢？</strong></p>
+<p>通过实验后你会发现，当你设置 inline 元素的 line-height 高度为其自身字体(内容)高度的时候，这样的上下留白问题就解决了。为什么会这样，作为菜鸟级的我分析为</p>
+<blockquote>
+<p>inline是没有宽高的，而他的可见是又自身内容所支撑出来的,而字体在计算的时候不同的浏览器，不同的字体所计算出来的实际高度都是大于字体本身大小并在浏览器中存在计算差异，这一点可以查看<a href="http://www.68design.net/Web-Guide/Web-Theory/43630-2.html" target="_blank" rel="external">《line-height和字体实际高度的计算》</a><br>而inline-block是有宽高的，他并不是又内容支撑起来的，所以在inline-block中就不存在这一的问题</p>
+</blockquote>
+<p><strong>如何将inline的上下水平留白去除呢</strong><br>因为inline的宽高是由内容支撑的，那么我们去修改他的内容就可以了，在上面我们知道了，文字的实际高度和line-height是不统一的，那么我们只需要设置他们统一就可以解决这一的问题了；<br>设置font-size的大小和line-height相等<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">font-size</span>: 30<span class="selector-tag">px</span>;</span><br><span class="line"><span class="comment">/*方法一*/</span></span><br><span class="line"><span class="selector-tag">line-height</span><span class="selector-pseudo">:30px</span>;</span><br><span class="line"><span class="comment">/*方法二*/</span></span><br><span class="line"><span class="selector-tag">line-height</span><span class="selector-pseudo">:1</span>;</span><br><span class="line"><span class="comment">/*方法三*/</span></span><br><span class="line"><span class="selector-tag">line-height</span><span class="selector-pseudo">:100</span>%;</span><br></pre></td></tr></table></figure></p>
+<p>在这里，<code>方法一</code>很容易理解，也就是我们经常能看到的；而其实line-height属性值除了能接受带有单位的值以外，其实还能接受百分比、直接的数值；这个在 W3C <a href="http://www.w3.org/wiki/CSS/Properties/line-height" target="_blank" rel="external">line-height</a>中有明确说明。<br><code>方案二</code>,<code>方案三</code>类似因为1=100%、1.5=150%，而且这样的方式不需要考虑font-size的具体值。</p>
+<p>#inline-block元素尾部有水平空隙的解决方法</p>
+<p>##1. display:inline-block 后的元素为什么会产生水平空隙，这真的是 bug 吗？</p>
+<ul>
+<li>现代浏览器中 inline 和 block 元素 display:inline-block 后均会产生水平空隙；</li>
+</ul>
+<p><img src="http://www.iyunlu.com/d/file/view/css-xhtml/2012-08-10/20120809191739.png" alt=""></p>
+<ul>
+<li>IE6、7，IE8（Q）模拟 display:inline-block 后分两种情况：</li>
+</ul>
+<p><img src="http://www.iyunlu.com/d/file/view/css-xhtml/2012-08-10/20120809193036.png" alt=""></p>
+<p>IE6、7，IE8（Q）中：inline 元素会产生空隙，block 元素不会产生空隙。</p>
+<p>看看 inline 元素默认的表现情况如何？原来默认就有空隙存在！它们是谁？是空白符（white space）！</p>
+<p><img src="http://www.iyunlu.com/d/file/view/css-xhtml/2012-08-10/untitled.png" alt=""><br>W3C 9.1 White space 中规定以下元素属于空白符（white space）：</p>
+<ul>
+<li>ASCII 空格 (&#x0020;)</li>
+<li>ASCII 制表符 (&#x0009;)</li>
+<li>ASCII 换页符 (&#x000C;)</li>
+</ul>
+<p>零宽度空格 (&#x200B;)「这个在闭合浮动中也有运用到」</p>
+<blockquote>
+<p><strong>9.3.2 Controlling line breaks</strong> 中进一步阐述：<br>A line break is defined to be a carriage return (&#x000D;), a line feed (&#x000A;), or a carriage return/line feed pair. All line breaks constitute white space.</p>
+<p>For more information about SGML’s specification of line breaks, please consult the notes on line breaks in the appendix.</p>
+</blockquote>
+<p>折行被定义为一个回车符（<code>&amp;#x000D;</code>），一个换行符 line feed (<code>&amp;#x000A;</code>)，或者一个回车、换行的组合。所有的折行构成了空白符。</p>
+<p>有关 SGML 规范中折行的更多信息，请参阅附录中关于折行的注释。<br>通常情况下，对于多个连续的空白符（空格，换行符，回车符等），浏览器会将他们合并为一个空白符。CSS 中由 white-space 这个属性来控制：<br>white-space：normal | pre | nowrap | pre-wrap | pre-line</p>
+<p>默认值：normal</p>
+<ul>
+<li><p>normal：默认处理方式。</p>
+</li>
+<li><p>pre：用等宽字体显示预先格式化的文本，不合并文字间的空白距离，当文字超出边界时不换行。可查阅 pre 对象</p>
+</li>
+<li><p>nowrap：强制在同一行内显示所有文本，直到文本结束或者遭遇 br 对象。</p>
+</li>
+<li><p>pre-wrap：用等宽字体显示预先格式化的文本，不合并文字间的空白距离，当文字碰到边界时发生换行。</p>
+</li>
+<li><p>pre-line：保持文本的换行，不保留文字间的空白距离，当文字碰到边界时发生换行。</p>
+</li>
+</ul>
+<p><img src="http://www.iyunlu.com/d/file/view/css-xhtml/2012-08-10/20120809200150.png" alt=""></p>
+<blockquote>
+<p>注：IE7及更早浏览器不支持 CSS2.1 新增的 pre-wrap | pre-line。</p>
+</blockquote>
+<p>所以这并不是 inline-block 后产生的 bug，而是因为 inline-block 具有 inline 元素固有的特性。那么为何 IE6、7 block 元素没有产生空隙呢？其实前面也提到了 IE 的 hasLayout，具有独立性，所以产生 hasLayout 的元素之间表现出来互不影响，这也再次表明 IE6、7 中的 inline-block 不能等同于 CSS2.1 中的 inline-block。如果非要说是有 bug， IE6、7 block 元素 inline-block 后不产生空隙才是 bug。</p>
+<p>测试表明删除换行符后，inline 元素间的空隙就「消失」了：<br><img src="http://www.iyunlu.com/d/file/view/css-xhtml/2012-08-10/20120809195205.png" alt=""></p>
+<p>##2. 去掉 inline-block 产生的空隙</p>
+<p>为了让各个浏览器表现一致，更好的还原视觉设计搞，很多时候我们需要去掉 inline-block 产生的空隙。<br>上一节中我们已经知道产生空隙的根本性原因是：</p>
+<p>HTML 中的换行符、空格符、制表符等产生了空白符，而这些归根结底都是字符，那么它们的大小都是受 font-size 来控制的，字体大小直接导致 inline 或者 inline-block 后元素之间空隙的大小，把 inline-block 元素间的空隙认为总是某个固定大小是错误的。</p>
+<p>用 GIF 动画的形式来表明对应关系：<br><img src="http://www.iyunlu.com/d/file/view/css-xhtml/2012-08-10/inline-block-fw.gif" alt=""></p>
+<p>很清楚的看到，当 font-size:0 的时候元素间的空隙都为0了，或许到这里你会感到很欣喜了，原来掌握的根本性原因这么简单就搞定了啊！</p>
+<p>然，<strong>理想是丰满的，现实是骨感的。</strong><br>大部分浏览器是支持 font-size:0 的。很明显，我们要和 IE 6、7 这两个妖孽进行一番战斗。</p>
+<p><strong>去除 inline-block 空隙终极解决方案（2012年8月17日更新）</strong><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">.dib-wrap &#123;</span><br><span class="line">    font-size:0;/* 所有浏览器 */</span><br><span class="line">    *word-spacing:-1px;/* IE6、7 */</span><br><span class="line">&#125;</span><br><span class="line">.dib-wrap .dib&#123;</span><br><span class="line">    font-size: 12px;</span><br><span class="line">    letter-spacing: normal;</span><br><span class="line">    word-spacing: normal;</span><br><span class="line">    vertical-align:top;</span><br><span class="line">&#125;</span><br><span class="line">@media screen and (-webkit-min-device-pixel-ratio:0)&#123;</span><br><span class="line">/* firefox 中 letter-spacing 会导致脱离普通流的元素水平位移 */</span><br><span class="line">     .dib-wrap&#123;</span><br><span class="line">            letter-spacing:-5px;/* Safari 等不支持字体大小为 0 的浏览器, N 根据父级字体调节*/</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">.dib &#123;</span><br><span class="line">    display: inline-block;</span><br><span class="line">    *display:inline;</span><br><span class="line">    *zoom:1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>YUI解决方案</strong><br>其实在 YUI 3 中也全面运用了 inline-block 作为基础布局，YUI 3 是这样解决的：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">.yui3-g &#123;</span><br><span class="line">letter-spacing: -0.31em; /* webkit: collapse white-space between units */</span><br><span class="line">*letter-spacing: normal; /* reset IE &lt; 8 */</span><br><span class="line">word-spacing: -0.43em; /* IE &lt; 8 &amp;&amp; gecko: collapse white-space between units */</span><br><span class="line">&#125;</span><br><span class="line">.yui3-u &#123;</span><br><span class="line">display: inline-block;</span><br><span class="line">zoom: 1; *display: inline; /* IE &lt; 8: fake inline-block */</span><br><span class="line">letter-spacing: normal;</span><br><span class="line">word-spacing: normal;</span><br><span class="line">vertical-align: top;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>显然，这里纯粹使用了 letter-spacing 和 word-spacing 来控制元素间的空隙，局限性极大，-0.31em 和 -0.43em 只是因为 YUI 3 全局 cssfonts.css 里设置是：「<code>body { font:13px/1.231 arial,helvetica,clean,sans-serif; }</code>」。</p>
+<p>当然，如果你坚持使用把 html 写在一行的方式来达到去除 inline-block 空隙的目的，我只能说：一切以牺牲结构来兼容表现的行为都是耍流氓！所以探讨此种方式去除空隙也将是无意义的，不在本文和作者考虑范围之内。</p>
+<p>文章内容为个人整理，主要内容来自<a href="http://www.iyunlu.com/view/css-xhtml/64.html" target="_blank" rel="external">inline-block 前世今生</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/CSS/">CSS</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://shimengwen.github.io/2014/12/06/inline-block在低版本浏览器和现代浏览器中的表现/" data-title="inline-block在低版本浏览器和现代浏览器中的表现 | Javascript + HTML5 +	CSS3.0" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/12/06/line-height和字体实际高度的计算/" title="line-height和字体实际高度的计算">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  line-height和字体实际高度的计算</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/11/26/一张图看懂License/"  title="一张图看懂License">
+ <strong>NEXT:</strong><br/> 
+ <span>一张图看懂License
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<!-- 多说评论框 start -->
+  <div class="ds-thread" data-thread-key="-inline-block在低版本浏览器和现代浏览器中的表现" data-title="inline-block在低版本浏览器和现代浏览器中的表现" data-url="inline-block在低版本浏览器和现代浏览器中的表现"></div>
+  <!-- 多说评论框 end -->
+  <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+  <script type="text/javascript">
+  var duoshuoQuery = {short_name:'undefined'};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+       || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+  <!-- 多说公共JS代码 end -->
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#到底什么是-inline-block"><span class="toc-number">1.</span> <span class="toc-text">到底什么是 inline-block</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/web前端开发/" title="web前端开发">web前端开发<sup>6</sup></a></li>
+		
+			<li><a href="/categories/web前端开发-移动开发/" title="web前端开发 移动开发">web前端开发 移动开发<sup>1</sup></a></li>
+		
+			<li><a href="/categories/前端开发/" title="前端开发">前端开发<sup>2</sup></a></li>
+		
+			<li><a href="/categories/开发工具/" title="开发工具">开发工具<sup>1</sup></a></li>
+		
+			<li><a href="/categories/操作系统/" title="操作系统">操作系统<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/CSS/" title="CSS">CSS<sup>3</sup></a></li>
+		
+			<li><a href="/tags/Extjs/" title="Extjs">Extjs<sup>1</sup></a></li>
+		
+			<li><a href="/tags/HTML/" title="HTML">HTML<sup>3</sup></a></li>
+		
+			<li><a href="/tags/HTML-CSS/" title="HTML CSS">HTML CSS<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hello-World/" title="Hello World">Hello World<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IDE工具/" title="IDE工具">IDE工具<sup>1</sup></a></li>
+		
+			<li><a href="/tags/License/" title="License">License<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Sass/" title="Sass">Sass<sup>1</sup></a></li>
+		
+			<li><a href="/tags/浏览器/" title="浏览器">浏览器<sup>1</sup></a></li>
+		
+			<li><a href="/tags/移动开发/" title="移动开发">移动开发<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="http://shimengwen.github.io/sitemap.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/dada246" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/shimengwen" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://shimengwen.github.io" target="_blank" title="King">King</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"shimengwen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+<script type="text/javascript">
+    var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cscript id='baiduTJ' src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fd9ccaa1ac5534d0b3f65d71f34f9e107' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  </body>
+</html>

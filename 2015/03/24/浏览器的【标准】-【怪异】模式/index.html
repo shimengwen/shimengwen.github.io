@@ -1,0 +1,423 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>浏览器的【标准】/【怪异】模式 | Javascript + HTML5 +	CSS3.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="King">
+    
+    <meta name="description" content="要想写出跨浏览器的CSS，必须知道浏览器解析CSS的两种模式：标准模式(strict/Standards mode)和怪异模式(quirks mode)。因为他决定了CSS盒子模型渲染模式的不同。
+特别IE对盒模型的渲染在 strict/Standards Mode和Quirks Mode是有很大差">
+    
+    
+    
+    
+    <link rel="alternate" href="http://shimengwen.github.io/sitemap.xml" title="Javascript + HTML5 +	CSS3.0" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Javascript + HTML5 +	CSS3.0" title="Javascript + HTML5 +	CSS3.0"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Javascript + HTML5 +	CSS3.0">Javascript + HTML5 +	CSS3.0</a></h1>
+				<h2 class="blog-motto">一个关于前端的博客</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/res">资源</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:shimengwen.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/03/24/浏览器的【标准】-【怪异】模式/" title="浏览器的【标准】/【怪异】模式" itemprop="url">浏览器的【标准】/【怪异】模式</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://shimengwen.github.io" title="King">King</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-03-24T15:53:58.000Z" itemprop="datePublished">2015-03-24</time>
+    更新日期:<time datetime="2016-05-29T09:20:40.000Z" itemprop="dateModified">2016-05-29</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+		</div>
+		
+		<p>要想写出跨浏览器的CSS，必须知道浏览器解析CSS的两种模式：标准模式(<code>strict/Standards mode</code>)和怪异模式(<code>quirks mode</code>)。因为他决定了CSS盒子模型渲染模式的不同。</p>
+<p>特别IE对盒模型的渲染在 <code>strict/Standards Mode</code>和<code>Quirks Mode</code>是有很大差别的，在<code>strict/Standards Mode</code>下对于盒模型的解释和其他的标准浏览器是一样，但在<code>Quirks Mode</code>模式下则有很大差别，而在不声明Doctype的情况下，IE默认又是<code>Quirks Mode</code>。所以为兼容性考虑，我们可能需要获取当前的文档渲染方式。</p>
+<p>###一、如何判断浏览器当前模式<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.top.document.compatMode <span class="comment">//CSS1Compat &amp; BackCompat</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>官方解释：</strong><br>BackCompat：标准兼容模式关闭。<br>CSS1Compat：标准兼容模式开启。</p>
+<p>###二、知道浏览器模式后该怎么办</p>
+<p>一开始我们就说过，浏览器模式直接影响了浏览器盒子模型的计算。所以我们通过确定浏览器模式去处理我们应该怎样获取计算盒子模型。</p>
+<blockquote>
+<p>当document.compatMode等于BackCompat时，浏览器客户区宽度是document.body.clientWidth；</p>
+<p>当document.compatMode等于CSS1Compat时，浏览器客户区宽度是document.documentElement.clientWidth。</p>
+</blockquote>
+<p>浏览器客户区高度、滚动条高度、滚动条的Left、滚动条的Top等等都是上面的情况.</p>
+<p><strong>所以我们可以得出：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="built_in">document</span>.compatMode == <span class="string">"BackCompat"</span>) &#123;</span><br><span class="line">cWidth = <span class="built_in">document</span>.body.clientWidth;</span><br><span class="line">cHeight = <span class="built_in">document</span>.body.clientHeight;</span><br><span class="line">sWidth = <span class="built_in">document</span>.body.scrollWidth;</span><br><span class="line">sHeight = <span class="built_in">document</span>.body.scrollHeight;</span><br><span class="line">sLeft = <span class="built_in">document</span>.body.scrollLeft;</span><br><span class="line">sTop = <span class="built_in">document</span>.body.scrollTop;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123; <span class="comment">//document.compatMode == "CSS1Compat"</span></span><br><span class="line">cWidth = <span class="built_in">document</span>.documentElement.clientWidth;</span><br><span class="line">cHeight = <span class="built_in">document</span>.documentElement.clientHeight;</span><br><span class="line">sWidth = <span class="built_in">document</span>.documentElement.scrollWidth;</span><br><span class="line">sHeight = <span class="built_in">document</span>.documentElement.scrollHeight;</span><br><span class="line">sLeft = <span class="built_in">document</span>.documentElement.scrollLeft == <span class="number">0</span> ? <span class="built_in">document</span>.body.scrollLeft : <span class="built_in">document</span>.documentElement.scrollLeft;</span><br><span class="line">sTop = <span class="built_in">document</span>.documentElement.scrollTop == <span class="number">0</span> ? <span class="built_in">document</span>.body.scrollTop : <span class="built_in">document</span>.documentElement.scrollTop;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>###三、获取的方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// JavaScript Document</span></span><br><span class="line"><span class="keyword">var</span> persistclose=<span class="number">0</span> <span class="comment">//set to 0 or 1. 1 means once the bar is manually closed, it will remain closed for browser session</span></span><br><span class="line"><span class="keyword">var</span> startX = <span class="number">3</span> <span class="comment">//set x offset of bar in pixels</span></span><br><span class="line"><span class="keyword">var</span> startY = <span class="number">150</span> <span class="comment">//set y offset of bar in pixels</span></span><br><span class="line"><span class="keyword">var</span> verticalpos=<span class="string">"fromtop"</span> <span class="comment">//enter "fromtop" or "frombottom"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">iecompattest</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"><span class="keyword">return</span> (<span class="built_in">document</span>.compatMode &amp;&amp; <span class="built_in">document</span>.compatMode!=<span class="string">"BackCompat"</span>)? <span class="built_in">document</span>.documentElement : <span class="built_in">document</span>.body;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get_cookie</span>(<span class="params">Name</span>) </span>&#123;</span><br><span class="line"><span class="keyword">var</span> search = Name + <span class="string">"="</span>;</span><br><span class="line"><span class="keyword">var</span> returnvalue = <span class="string">""</span>;</span><br><span class="line"><span class="keyword">if</span> (<span class="built_in">document</span>.cookie.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">offset = <span class="built_in">document</span>.cookie.indexOf(search);</span><br><span class="line"><span class="keyword">if</span> (offset != <span class="number">-1</span>) &#123;</span><br><span class="line">offset += search.length;</span><br><span class="line">end = <span class="built_in">document</span>.cookie.indexOf(<span class="string">";"</span>, offset);</span><br><span class="line"><span class="keyword">if</span> (end == <span class="number">-1</span>) end = <span class="built_in">document</span>.cookie.length;</span><br><span class="line">returnvalue=<span class="built_in">unescape</span>(<span class="built_in">document</span>.cookie.substring(offset, end));</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> returnvalue;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*-- </span><br><span class="line">function hidebar()&#123;</span><br><span class="line">if (persistclose)</span><br><span class="line">document.cookie="remainclosed=1";</span><br><span class="line">document.getElementById("M").style.display="none";</span><br><span class="line">document.getElementById("show_M").style.display="block";</span><br><span class="line">&#125;</span><br><span class="line">function showbar()&#123;</span><br><span class="line">if(persistclose==0)</span><br><span class="line">document.cookie="remainclosed=0";</span><br><span class="line">document.getElementById("M").style.display="block";</span><br><span class="line">document.getElementById("show_M").style.display="none";</span><br><span class="line">&#125;</span><br><span class="line">--*/</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">staticbar</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">barheight=<span class="built_in">document</span>.getElementById(<span class="string">"float_qq"</span>).offsetHeight</span><br><span class="line"><span class="keyword">var</span> ns = (navigator.appName.indexOf(<span class="string">"Netscape"</span>) != <span class="number">-1</span>) || <span class="built_in">window</span>.opera;</span><br><span class="line"><span class="keyword">var</span> d = <span class="built_in">document</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ml</span>(<span class="params">id</span>)</span>&#123;</span><br><span class="line">   <span class="keyword">var</span> el=d.getElementById(id);</span><br><span class="line">   <span class="keyword">if</span> (!persistclose || persistclose &amp;&amp; get_cookie(<span class="string">"remainclosed"</span>)==<span class="string">""</span>)</span><br><span class="line">   el.style.visibility=<span class="string">"visible"</span></span><br><span class="line">   <span class="keyword">if</span>(d.layers)el.style=el;</span><br><span class="line">   el.sP=<span class="function"><span class="keyword">function</span>(<span class="params">x,y</span>)</span>&#123;<span class="keyword">this</span>.style.left=x+<span class="string">"px"</span>;<span class="keyword">this</span>.style.top=y+<span class="string">"px"</span>;&#125;;</span><br><span class="line">   el.x = startX;</span><br><span class="line">   <span class="keyword">if</span> (verticalpos==<span class="string">"fromtop"</span>)</span><br><span class="line">   el.y = startY;</span><br><span class="line">   <span class="keyword">else</span>&#123;</span><br><span class="line">   el.y = ns ? pageYOffset + innerHeight : iecompattest().scrollTop + iecompattest().clientHeight;</span><br><span class="line">   el.y -= startY;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> el;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">window</span>.stayTopLeft=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">   <span class="keyword">if</span> (verticalpos==<span class="string">"fromtop"</span>)&#123;</span><br><span class="line">   <span class="keyword">var</span> pY = ns ? pageYOffset : iecompattest().scrollTop;</span><br><span class="line">   ftlObj.y += (pY + startY - ftlObj.y)/<span class="number">8</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">else</span>&#123;</span><br><span class="line">   <span class="keyword">var</span> pY = ns ? pageYOffset + innerHeight - barheight: iecompattest().scrollTop + iecompattest().clientHeight - barheight;</span><br><span class="line">   ftlObj.y += (pY - startY - ftlObj.y)/<span class="number">8</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   ftlObj.sP(ftlObj.x, ftlObj.y);</span><br><span class="line">   setTimeout(<span class="string">"stayTopLeft()"</span>, <span class="number">10</span>);</span><br><span class="line">&#125;</span><br><span class="line">ftlObj = ml(<span class="string">"float_qq"</span>);</span><br><span class="line">stayTopLeft();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="built_in">window</span>.addEventListener)</span><br><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">"load"</span>, staticbar, <span class="literal">false</span>);</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">window</span>.attachEvent)</span><br><span class="line"><span class="built_in">window</span>.attachEvent(<span class="string">"onload"</span>, staticbar);</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">document</span>.getElementById)</span><br><span class="line"><span class="built_in">window</span>.onload=staticbar;</span><br></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/浏览器/">浏览器</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/前端开发/">前端开发</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://shimengwen.github.io/2015/03/24/浏览器的【标准】-【怪异】模式/" data-title="浏览器的【标准】/【怪异】模式 | Javascript + HTML5 +	CSS3.0" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/05/24/Weinre实现远程调试页面/" title="Weinre实现远程调试页面">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Weinre实现远程调试页面</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/03/24/Sass Compass sprite 的使用(一)/"  title="Sass Compass sprite 的使用(一)">
+ <strong>NEXT:</strong><br/> 
+ <span>Sass Compass sprite 的使用(一)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<!-- 多说评论框 start -->
+  <div class="ds-thread" data-thread-key="-浏览器的【标准】/【怪异】模式" data-title="浏览器的【标准】/【怪异】模式" data-url="浏览器的【标准】/【怪异】模式"></div>
+  <!-- 多说评论框 end -->
+  <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+  <script type="text/javascript">
+  var duoshuoQuery = {short_name:'undefined'};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+       || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+  <!-- 多说公共JS代码 end -->
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/web前端开发/" title="web前端开发">web前端开发<sup>6</sup></a></li>
+		
+			<li><a href="/categories/web前端开发-移动开发/" title="web前端开发 移动开发">web前端开发 移动开发<sup>1</sup></a></li>
+		
+			<li><a href="/categories/前端开发/" title="前端开发">前端开发<sup>2</sup></a></li>
+		
+			<li><a href="/categories/开发工具/" title="开发工具">开发工具<sup>1</sup></a></li>
+		
+			<li><a href="/categories/操作系统/" title="操作系统">操作系统<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/CSS/" title="CSS">CSS<sup>3</sup></a></li>
+		
+			<li><a href="/tags/Extjs/" title="Extjs">Extjs<sup>1</sup></a></li>
+		
+			<li><a href="/tags/HTML/" title="HTML">HTML<sup>3</sup></a></li>
+		
+			<li><a href="/tags/HTML-CSS/" title="HTML CSS">HTML CSS<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hello-World/" title="Hello World">Hello World<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IDE工具/" title="IDE工具">IDE工具<sup>1</sup></a></li>
+		
+			<li><a href="/tags/License/" title="License">License<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Sass/" title="Sass">Sass<sup>1</sup></a></li>
+		
+			<li><a href="/tags/浏览器/" title="浏览器">浏览器<sup>1</sup></a></li>
+		
+			<li><a href="/tags/移动开发/" title="移动开发">移动开发<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="http://shimengwen.github.io/sitemap.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/dada246" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/shimengwen" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://shimengwen.github.io" target="_blank" title="King">King</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"shimengwen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+<script type="text/javascript">
+    var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cscript id='baiduTJ' src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fd9ccaa1ac5534d0b3f65d71f34f9e107' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  </body>
+</html>
